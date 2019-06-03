@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liang.guli.eduservice.mapper.EduCourseMapper">
+
+    <select id="getPublishCourseInfo" resultType="com.liang.guli.eduservice.entity.query.PublishCourseInfo">
+        SELECT ec.title,ec.price,ec.cover,ec.lesson_num,ed.description,et.name AS teacherName,
+        es1.title AS subjectLevelOne,es2.title AS subjectLevelTwo
+        FROM edu_course ec LEFT OUTER JOIN edu_course_description ed ON ec.id=ed.id
+        LEFT OUTER JOIN edu_teacher et ON ec.teacher_id=et.id
+        LEFT OUTER JOIN edu_subject es1 ON ec.subject_parent_id=es1.id
+        LEFT OUTER JOIN edu_subject es2 ON ec.subject_id=es2.id
+        WHERE ec.id=#{courseId}
+    </select>
+
+
+    <select id="getCourseWebDtoByCourseId" resultType="com.liang.guli.eduservice.entity.dto.CourseWebDto">
+        SELECT ec.id,ec.title,ec.price,ec.cover,ec.buy_count,ec.view_count,ec.lesson_num,
+               ed.description,
+               es1.title AS subjectLevelOne,es2.title AS subjectLevelTwo,
+               et.name AS teacherName,et.avatar,et.intro
+        FROM edu_course ec
+        LEFT JOIN edu_course_description ed ON ec.`id`=ed.`id`
+        LEFT JOIN edu_teacher et ON ec.`teacher_id`=et.`id`
+        LEFT JOIN edu_subject es1 ON ec.`subject_parent_id` = es1.`id`
+        LEFT JOIN edu_subject es2 ON ec.`subject_id` = es2.`id`
+        WHERE ec.id=#{courseId}
+
+    </select>
+
+</mapper>
